@@ -3,7 +3,6 @@ package com.yuyakaido.android.cardstackview.internal;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.View;
-
 import com.yuyakaido.android.cardstackview.Direction;
 
 public class CardStackState {
@@ -42,14 +41,9 @@ public class CardStackState {
     }
 
     public float getRatio() {
-        int absDx = Math.abs(dx);
-        int absDy = Math.abs(dy);
-        float ratio;
-        if (absDx < absDy) {
-            ratio = absDy / (height / 2.0f);
-        } else {
-            ratio = absDx / (width / 2.0f);
-        }
+        float ratioX = Math.abs(dx) / (width / 2.0f);
+        float ratioY = Math.abs(dy) / (height / 2.0f);
+        float ratio = Math.max(ratioX, ratioY);
         return Math.min(ratio, 1.0f);
     }
 
