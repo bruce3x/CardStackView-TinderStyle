@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -31,12 +31,18 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Spot spot = spots.get(position);
+        final Spot spot = spots.get(position);
         holder.name.setText(spot.name);
         holder.city.setText(spot.city);
         Glide.with(holder.image)
                 .load(spot.url)
                 .into(holder.image);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), spot.name, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
