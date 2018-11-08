@@ -392,7 +392,7 @@ public class CardStackLayoutManager
     }
 
     private void smoothScrollToNext(int position) {
-        state.proportion = 0.0f;
+        state.proportion = setting.automaticSwipeProportion;
         state.targetPosition = position;
         CardStackSmoothScroller scroller = new CardStackSmoothScroller(CardStackSmoothScroller.ScrollType.AutomaticSwipe, this);
         scroller.setTargetPosition(state.topPosition);
@@ -478,4 +478,10 @@ public class CardStackLayoutManager
         setting.rewindAnimationSetting = rewindAnimationSetting;
     }
 
+    public void setAutomaticSwipeProportion(@FloatRange(from = -1.0f, to = 1.0f) float proportion) {
+        if (proportion < -1.0f || 1.0f < proportion) {
+            throw new IllegalArgumentException("AutomaticSwipeProportion must be -1.0f to 1.0f.");
+        }
+        setting.automaticSwipeProportion = proportion;
+    }
 }

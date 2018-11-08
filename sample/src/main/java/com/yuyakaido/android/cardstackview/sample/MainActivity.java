@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements CardStackListener
             public void onClick(View v) {
                 SwipeAnimationSetting setting = new SwipeAnimationSetting.Builder()
                         .setDirection(Direction.Left)
-                        .setDuration(200)
+                        .setDuration(300)
                         .setInterpolator(new AccelerateInterpolator())
                         .build();
                 manager.setSwipeAnimationSetting(setting);
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements CardStackListener
             public void onClick(View v) {
                 RewindAnimationSetting setting = new RewindAnimationSetting.Builder()
                         .setDirection(Direction.Bottom)
-                        .setDuration(200)
+                        .setDuration(300)
                         .setInterpolator(new DecelerateInterpolator())
                         .build();
                 manager.setRewindAnimationSetting(setting);
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements CardStackListener
             public void onClick(View v) {
                 SwipeAnimationSetting setting = new SwipeAnimationSetting.Builder()
                         .setDirection(Direction.Right)
-                        .setDuration(200)
+                        .setDuration(300)
                         .setInterpolator(new AccelerateInterpolator())
                         .build();
                 manager.setSwipeAnimationSetting(setting);
@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements CardStackListener
         manager.setDirections(Direction.FREEDOM);
         manager.setCanScrollHorizontal(true);
         manager.setCanScrollVertical(true);
+        manager.setAutomaticSwipeProportion(1.0f);
         adapter = new CardStackAdapter(this, createSpots());
         cardStackView = findViewById(R.id.card_stack_view);
         cardStackView.setLayoutManager(manager);
