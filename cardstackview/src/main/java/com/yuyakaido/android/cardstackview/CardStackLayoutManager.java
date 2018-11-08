@@ -7,13 +7,10 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.yuyakaido.android.cardstackview.internal.CardStackSetting;
-import com.yuyakaido.android.cardstackview.internal.CardStackSmoothScroller;
-import com.yuyakaido.android.cardstackview.internal.CardStackState;
-import com.yuyakaido.android.cardstackview.internal.DisplayUtil;
+import com.yuyakaido.android.cardstackview.internal.*;
 
 import java.util.List;
 
@@ -26,6 +23,8 @@ public class CardStackLayoutManager
     private CardStackListener listener = CardStackListener.DEFAULT;
     private CardStackSetting setting = new CardStackSetting();
     private CardStackState state = new CardStackState();
+
+    private SparseArray<CardSwipeRecord> swipeRecords = new SparseArray<>();
 
     public CardStackLayoutManager(Context context) {
         this(context, CardStackListener.DEFAULT);
@@ -173,14 +172,18 @@ public class CardStackLayoutManager
         if (state.status == CardStackState.Status.PrepareSwipeAnimation && (state.targetPosition == RecyclerView.NO_POSITION || state.topPosition < state.targetPosition)) {
             if (Math.abs(state.dx) > getWidth() || Math.abs(state.dy) > getHeight()) {
                 state.next(CardStackState.Status.SwipeAnimating);
-                state.topPosition++;
+
                 final Direction direction = state.getDirection();
+                final CardSwipeRecord record = CardSwipeRecord.save(state);
                 new Handler().post(new Runnable() {
                     @Override
                     public void run() {
                         listener.onCardSwiped(direction);
+                        swipeRecords.put(record.index, record);
                     }
                 });
+
+                state.topPosition++;
                 state.dx = 0;
                 state.dy = 0;
             }
@@ -400,6 +403,13 @@ public class CardStackLayoutManager
         state.proportion = 0.0f;
         state.targetPosition = position;
         state.topPosition--;
+
+        CardSwipeRecord memory = swipeRecords.get(state.topPosition);
+        if (memory != null) {
+            swipeRecords.remove(state.topPosition);
+            memory.restore(state);
+        }
+
         CardStackSmoothScroller scroller = new CardStackSmoothScroller(CardStackSmoothScroller.ScrollType.AutomaticRewind, this);
         scroller.setTargetPosition(state.topPosition);
         startSmoothScroll(scroller);

@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements CardStackListener
         manager.setScaleInterval(0.95f);
         manager.setSwipeThreshold(0.3f);
         manager.setMaxDegree(20.0f);
-        manager.setDirections(Direction.HORIZONTAL);
+        manager.setDirections(Direction.FREEDOM);
         manager.setCanScrollHorizontal(true);
         manager.setCanScrollVertical(true);
         adapter = new CardStackAdapter(this, createSpots());
